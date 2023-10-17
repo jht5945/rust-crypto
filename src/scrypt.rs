@@ -19,14 +19,13 @@ use std::mem::size_of;
 use cryptoutil::copy_memory;
 
 use rand::{OsRng, Rng};
-use serialize::base64;
-use serialize::base64::{FromBase64, ToBase64};
 
 use cryptoutil::{read_u32_le, read_u32v_le, write_u32_le};
 use hmac::Hmac;
 use pbkdf2::pbkdf2;
 use sha2::Sha256;
 use util::fixed_time_eq;
+use util_base64::{FromBase64, ToBase64};
 
 // The salsa20/8 core function.
 fn salsa20_8(input: &[u8], output: &mut [u8]) {
@@ -287,19 +286,19 @@ pub fn scrypt_simple(password: &str, params: &ScryptParams) -> io::Result<String
         tmp[0] = params.log_n;
         tmp[1] = params.r as u8;
         tmp[2] = params.p as u8;
-        result.push_str(&*tmp.to_base64(base64::STANDARD));
+        result.push_str(&*tmp.to_base64());
     } else {
         result.push_str("1$");
         let mut tmp = [0u8; 9];
         tmp[0] = params.log_n;
         write_u32_le(&mut tmp[1..5], params.r);
         write_u32_le(&mut tmp[5..9], params.p);
-        result.push_str(&*tmp.to_base64(base64::STANDARD));
+        result.push_str(&*tmp.to_base64());
     }
     result.push('$');
-    result.push_str(&*salt.to_base64(base64::STANDARD));
+    result.push_str(&*salt.to_base64());
     result.push('$');
-    result.push_str(&*dk.to_base64(base64::STANDARD));
+    result.push_str(&*dk.to_base64());
     result.push('$');
 
     Ok(result)

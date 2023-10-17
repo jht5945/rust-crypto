@@ -14,14 +14,13 @@ use std::io;
 use cryptoutil::copy_memory;
 
 use rand::{OsRng, Rng};
-use serialize::base64;
-use serialize::base64::{FromBase64, ToBase64};
 
 use cryptoutil::{read_u32_be, write_u32_be};
 use hmac::Hmac;
 use mac::Mac;
 use sha2::Sha256;
 use util::fixed_time_eq;
+use util_base64::{FromBase64, ToBase64};
 
 // Calculate a block of the output of size equal to the output_bytes of the underlying Mac function
 // mac - The Mac function to use
@@ -145,11 +144,11 @@ pub fn pbkdf2_simple(password: &str, c: u32) -> io::Result<String> {
     let mut result = "$rpbkdf2$0$".to_string();
     let mut tmp = [0u8; 4];
     write_u32_be(&mut tmp, c);
-    result.push_str(&tmp.to_base64(base64::STANDARD)[..]);
+    result.push_str(&tmp.to_base64()[..]);
     result.push('$');
-    result.push_str(&salt.to_base64(base64::STANDARD)[..]);
+    result.push_str(&salt.to_base64()[..]);
     result.push('$');
-    result.push_str(&dk.to_base64(base64::STANDARD)[..]);
+    result.push_str(&dk.to_base64()[..]);
     result.push('$');
 
     Ok(result)
