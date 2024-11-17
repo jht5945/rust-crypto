@@ -1,5 +1,5 @@
 [package]
-name = "rust-crypto"
+name = "rust-crypto-hatter-fork"
 version = "0.2.36"
 authors = ["The Rust-Crypto Project Developers"]
 license = "MIT/Apache-2.0"
